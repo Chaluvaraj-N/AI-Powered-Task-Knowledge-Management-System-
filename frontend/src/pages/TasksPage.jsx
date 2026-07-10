@@ -7,7 +7,6 @@ import {
   Spinner,
   EmptyState,
   PrimaryButton,
-  SecondaryButton,
 } from "../components/ui";
 
 export default function TasksPage() {
@@ -81,47 +80,47 @@ export default function TasksPage() {
 
   return (
     <div>
-      <div className="flex items-start justify-between mb-6 gap-4">
+      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="font-display text-2xl font-semibold text-[var(--color-ink)]">
+          <h1 className="font-display text-2xl font-semibold tracking-tight text-[var(--color-ink)] sm:text-3xl">
             Tasks
           </h1>
-          <p className="text-sm text-[var(--color-ink)]/50 mt-1">
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--color-ink)]/55 sm:text-base">
             {isAdmin
               ? "Create tasks and assign them to your team."
               : "View your assigned tasks and mark them complete."}
           </p>
         </div>
         {isAdmin && (
-          <PrimaryButton onClick={() => setShowForm((s) => !s)}>
+          <PrimaryButton onClick={() => setShowForm((s) => !s)} className="sm:self-start">
             {showForm ? "Cancel" : "+ New Task"}
           </PrimaryButton>
         )}
       </div>
 
       {isAdmin && showForm && (
-        <Card className="p-5 mb-6">
+        <Card className="mb-6 p-5 sm:p-6">
           <form onSubmit={handleCreate} className="space-y-4">
-            <div className="grid md:grid-cols-2 gap-4">
+            <div className="grid gap-4 md:grid-cols-2">
               <div>
-                <label className="block text-xs font-medium text-[var(--color-ink)]/60 mb-1.5">
+                <label className="mb-1.5 block text-xs font-medium text-[var(--color-ink)]/60">
                   Title
                 </label>
                 <input
                   value={form.title}
                   onChange={(e) => setForm({ ...form, title: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg border border-[var(--color-line)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]/30"
+                  className="field"
                   placeholder="Review Q3 leave policy"
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-[var(--color-ink)]/60 mb-1.5">
+                <label className="mb-1.5 block text-xs font-medium text-[var(--color-ink)]/60">
                   Assign to
                 </label>
                 <select
                   value={form.assigned_to_id}
                   onChange={(e) => setForm({ ...form, assigned_to_id: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg border border-[var(--color-line)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]/30 bg-white"
+                  className="field-select"
                 >
                   <option value="">Select a user…</option>
                   {users.map((u) => (
@@ -133,21 +132,21 @@ export default function TasksPage() {
               </div>
             </div>
             <div>
-              <label className="block text-xs font-medium text-[var(--color-ink)]/60 mb-1.5">
+              <label className="mb-1.5 block text-xs font-medium text-[var(--color-ink)]/60">
                 Description
               </label>
               <textarea
                 value={form.description}
                 onChange={(e) => setForm({ ...form, description: e.target.value })}
                 rows={2}
-                className="w-full px-3 py-2 rounded-lg border border-[var(--color-line)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]/30"
+                className="field min-h-[5.5rem] resize-y"
                 placeholder="Optional details…"
               />
             </div>
             {formError && (
               <div className="text-sm text-[var(--color-danger)]">{formError}</div>
             )}
-            <PrimaryButton type="submit" disabled={submitting}>
+            <PrimaryButton type="submit" disabled={submitting} className="w-full sm:w-auto">
               {submitting ? "Creating…" : "Create task"}
             </PrimaryButton>
           </form>
@@ -155,11 +154,11 @@ export default function TasksPage() {
       )}
 
       {/* Dynamic filtering controls -> GET /tasks?status=&assigned_to= */}
-      <div className="flex flex-wrap gap-3 mb-6">
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="px-3 py-2 rounded-lg border border-[var(--color-line)] text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]/30"
+          className="field-select sm:w-52"
         >
           <option value="">All statuses</option>
           <option value="pending">Pending</option>
@@ -169,7 +168,7 @@ export default function TasksPage() {
           <select
             value={assignedFilter}
             onChange={(e) => setAssignedFilter(e.target.value)}
-            className="px-3 py-2 rounded-lg border border-[var(--color-line)] text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]/30"
+            className="field-select sm:w-56"
           >
             <option value="">All assignees</option>
             {users.map((u) => (
@@ -190,7 +189,8 @@ export default function TasksPage() {
       ) : (
         <div className="space-y-3">
           {tasks.map((task) => (
-            <Card key={task.id} className="p-4 flex items-center gap-4">
+            <Card key={task.id} className="p-4">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
               <button
                 onClick={() => toggleStatus(task)}
                 className={`w-5 h-5 rounded-full border-2 shrink-0 flex items-center justify-center transition-colors ${
@@ -204,7 +204,7 @@ export default function TasksPage() {
                   <span className="text-[10px] leading-none">✓</span>
                 )}
               </button>
-              <div className="flex-1 min-w-0">
+              <div className="min-w-0 flex-1">
                 <div
                   className={`text-sm font-medium ${
                     task.status === "completed"
@@ -215,12 +215,15 @@ export default function TasksPage() {
                   {task.title}
                 </div>
                 {task.description && (
-                  <div className="text-xs text-[var(--color-ink)]/50 mt-0.5 truncate">
+                  <div className="mt-0.5 break-words text-xs text-[var(--color-ink)]/50">
                     {task.description}
                   </div>
                 )}
               </div>
-              <StatusBadge status={task.status} />
+              <div className="sm:self-start">
+                <StatusBadge status={task.status} />
+              </div>
+              </div>
             </Card>
           ))}
         </div>

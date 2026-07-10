@@ -39,11 +39,11 @@ export default function DashboardPage() {
 
   return (
     <div>
-      <div className="mb-8">
-        <h1 className="font-display text-2xl font-semibold text-[var(--color-ink)]">
+      <div className="mb-6 sm:mb-8">
+        <h1 className="font-display text-2xl font-semibold tracking-tight text-[var(--color-ink)] sm:text-3xl">
           {greeting}, {user?.full_name?.split(" ")[0]}
         </h1>
-        <p className="text-sm text-[var(--color-ink)]/50 mt-1">
+        <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--color-ink)]/55 sm:text-base">
           {isAdmin
             ? "Here's what's happening across the knowledge base and task board."
             : "Here's a quick look at your tasks and the shared knowledge base."}
@@ -56,19 +56,21 @@ export default function DashboardPage() {
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4 mb-8">
             <StatCard label="Total Tasks" value={analytics.total_tasks} />
             <StatCard label="Completed" value={analytics.completed_tasks} accent />
             <StatCard label="Pending" value={analytics.pending_tasks} />
             <StatCard label="Documents" value={analytics.total_documents} />
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6">
-            <Card className="p-6">
-              <h2 className="font-display text-lg font-semibold mb-4">Task Completion</h2>
-              <div className="flex items-end gap-6">
+          <div className="grid gap-6 lg:grid-cols-2">
+            <Card className="p-5 sm:p-6">
+              <h2 className="font-display text-lg font-semibold mb-4 sm:text-xl">
+                Task Completion
+              </h2>
+              <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:gap-6">
                 <div>
-                  <div className="text-4xl font-display font-semibold text-[var(--color-accent)]">
+                  <div className="text-4xl font-display font-semibold text-[var(--color-accent)] sm:text-5xl">
                     {analytics.total_tasks > 0
                       ? Math.round(
                           (analytics.completed_tasks / analytics.total_tasks) * 100
@@ -78,9 +80,9 @@ export default function DashboardPage() {
                   </div>
                   <div className="text-xs text-[var(--color-ink)]/40 mt-1">completion rate</div>
                 </div>
-                <div className="flex-1 h-3 bg-[var(--color-paper)] rounded-full overflow-hidden">
+                <div className="h-3 flex-1 overflow-hidden rounded-full bg-[var(--color-paper)]">
                   <div
-                    className="h-full bg-[var(--color-accent)] rounded-full transition-all"
+                    className="h-full rounded-full bg-[var(--color-accent)] transition-all"
                     style={{
                       width: `${
                         analytics.total_tasks > 0
@@ -93,14 +95,14 @@ export default function DashboardPage() {
               </div>
               <button
                 onClick={() => navigate("/tasks")}
-                className="mt-5 text-sm font-medium text-[var(--color-accent)] hover:underline"
+                className="mt-5 inline-flex text-sm font-medium text-[var(--color-accent)] hover:underline"
               >
                 View all tasks →
               </button>
             </Card>
 
-            <Card className="p-6">
-              <h2 className="font-display text-lg font-semibold mb-4">
+            <Card className="p-5 sm:p-6">
+              <h2 className="font-display text-lg font-semibold mb-4 sm:text-xl">
                 Most Searched Queries
               </h2>
               {analytics.most_searched_queries.length === 0 ? (
@@ -112,9 +114,9 @@ export default function DashboardPage() {
                   {analytics.most_searched_queries.slice(0, 6).map((q, i) => (
                     <li
                       key={i}
-                      className="flex items-center justify-between text-sm gap-3"
+                      className="flex items-start justify-between gap-3 text-sm"
                     >
-                      <span className="truncate text-[var(--color-ink)]/80">
+                      <span className="min-w-0 flex-1 break-words text-[var(--color-ink)]/80">
                         "{q.query_text}"
                       </span>
                       <span className="font-mono text-xs text-[var(--color-ink)]/40 shrink-0">
@@ -126,7 +128,7 @@ export default function DashboardPage() {
               )}
               <button
                 onClick={() => navigate("/search")}
-                className="mt-5 text-sm font-medium text-[var(--color-accent)] hover:underline"
+                  className="mt-5 inline-flex text-sm font-medium text-[var(--color-accent)] hover:underline"
               >
                 Search knowledge base →
               </button>
@@ -134,7 +136,7 @@ export default function DashboardPage() {
           </div>
 
           {isAdmin && (
-            <div className="grid md:grid-cols-2 gap-4 mt-6">
+              <div className="grid gap-4 mt-6 sm:grid-cols-2">
               <StatCard label="Total Users" value={analytics.total_users} />
               <StatCard label="Total Searches Run" value={analytics.total_searches} />
             </div>

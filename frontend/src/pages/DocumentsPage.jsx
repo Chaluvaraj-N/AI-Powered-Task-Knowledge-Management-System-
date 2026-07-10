@@ -54,17 +54,17 @@ export default function DocumentsPage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="font-display text-2xl font-semibold text-[var(--color-ink)]">
+        <h1 className="font-display text-2xl font-semibold tracking-tight text-[var(--color-ink)] sm:text-3xl">
           Documents
         </h1>
-        <p className="text-sm text-[var(--color-ink)]/50 mt-1">
+        <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--color-ink)]/55 sm:text-base">
           Upload .txt or .pdf files. Each upload is chunked and embedded into the
           local semantic search index automatically.
         </p>
       </div>
 
       <Card
-        className={`p-8 mb-8 border-2 border-dashed text-center transition-colors ${
+        className={`mb-8 border-2 border-dashed p-5 text-center transition-colors sm:p-8 ${
           dragOver
             ? "border-[var(--color-accent)] bg-[var(--color-accent-light)]"
             : "border-[var(--color-line)]"
@@ -80,8 +80,10 @@ export default function DocumentsPage() {
           handleUpload(e.dataTransfer.files?.[0]);
         }}
       >
-        <div className="text-2xl mb-2 opacity-40">⎘</div>
-        <p className="text-sm text-[var(--color-ink)]/60 mb-4">
+        <div className="mb-2 text-2xl opacity-40" aria-hidden="true">
+          ⎘
+        </div>
+        <p className="mb-4 text-sm text-[var(--color-ink)]/60">
           Drag &amp; drop a .txt or .pdf file here, or
         </p>
         <input
@@ -94,6 +96,7 @@ export default function DocumentsPage() {
         <PrimaryButton
           onClick={() => fileInputRef.current?.click()}
           disabled={uploading}
+          className="w-full sm:w-auto"
         >
           {uploading ? (
             <span className="flex items-center gap-2">
@@ -115,12 +118,13 @@ export default function DocumentsPage() {
       ) : (
         <div className="space-y-3">
           {documents.map((doc) => (
-            <Card key={doc.id} className="p-4 flex items-center gap-4">
-              <div className="w-9 h-9 rounded-lg bg-[var(--color-accent-light)] text-[var(--color-accent)] flex items-center justify-center text-xs font-mono uppercase shrink-0">
+            <Card key={doc.id} className="p-4">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[var(--color-accent-light)] text-xs font-mono uppercase text-[var(--color-accent)]">
                 {doc.file_type}
               </div>
               <div className="flex-1 min-w-0">
-                <div className="text-sm font-medium text-[var(--color-ink)] truncate">
+                <div className="break-words text-sm font-medium text-[var(--color-ink)]">
                   {doc.title}
                 </div>
                 <div className="text-xs text-[var(--color-ink)]/40 mt-0.5">
@@ -138,10 +142,11 @@ export default function DocumentsPage() {
               </span>
               <SecondaryButton
                 onClick={() => handleDelete(doc.id)}
-                className="text-[var(--color-danger)] shrink-0"
+                className="w-full shrink-0 text-[var(--color-danger)] sm:w-auto"
               >
                 Delete
               </SecondaryButton>
+              </div>
             </Card>
           ))}
         </div>

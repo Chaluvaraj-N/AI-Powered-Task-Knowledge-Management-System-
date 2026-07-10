@@ -18,10 +18,39 @@ html, body, #root {
   height: 100%;
 }
 
+html {
+  overflow-x: hidden;
+}
+
 body {
   background-color: var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-sans);
+  overflow-x: hidden;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+::placeholder {
+  color: rgb(20 24 31 / 0.38);
 }
 
 ::selection {
@@ -35,4 +64,28 @@ body {
 
 .font-mono {
   font-family: var(--font-mono);
+}
+
+.surface {
+  @apply bg-[var(--color-panel)] border border-[var(--color-line)] rounded-2xl shadow-sm;
+}
+
+.field {
+  @apply w-full rounded-xl border border-[var(--color-line)] bg-white px-3 py-2.5 text-sm text-[var(--color-ink)] transition;
+  @apply placeholder:text-[rgb(20_24_31_/_0.38)] focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[color:var(--color-accent)]/15;
+}
+
+.field-select {
+  @apply w-full rounded-xl border border-[var(--color-line)] bg-white px-3 py-2.5 text-sm text-[var(--color-ink)] transition;
+  @apply placeholder:text-[rgb(20_24_31_/_0.38)] focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[color:var(--color-accent)]/15;
+}
+
+.btn-primary {
+  @apply inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--color-accent)] px-4 py-2.5 text-sm font-medium text-white transition;
+  @apply hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+.btn-secondary {
+  @apply inline-flex items-center justify-center gap-2 rounded-xl border border-[var(--color-line)] bg-white px-4 py-2.5 text-sm font-medium text-[var(--color-ink)] transition;
+  @apply hover:bg-[var(--color-accent-light)] disabled:cursor-not-allowed disabled:opacity-50;
 }

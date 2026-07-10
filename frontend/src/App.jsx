@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import AppLayout from "./components/AppLayout";
@@ -7,6 +8,8 @@ import SearchPage from "./pages/SearchPage";
 import TasksPage from "./pages/TasksPage";
 import DocumentsPage from "./pages/DocumentsPage";
 import ActivityPage from "./pages/ActivityPage";
+
+const APP_TITLE = "AI-Powered Task & Knowledge Management System";
 
 function ProtectedRoute({ children, adminOnly = false }) {
   const { user, isAdmin } = useAuth();
@@ -70,6 +73,10 @@ function AppRoutes() {
 }
 
 export default function App() {
+  useEffect(() => {
+    document.title = APP_TITLE;
+  }, []);
+
   return (
     <AuthProvider>
       <AppRoutes />

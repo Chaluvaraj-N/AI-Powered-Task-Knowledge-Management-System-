@@ -30,34 +30,34 @@ export default function SearchPage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="font-display text-2xl font-semibold text-[var(--color-ink)]">
+        <h1 className="font-display text-2xl font-semibold tracking-tight text-[var(--color-ink)] sm:text-3xl">
           Search Knowledge Base
         </h1>
-        <p className="text-sm text-[var(--color-ink)]/50 mt-1">
+        <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--color-ink)]/55 sm:text-base">
           Ask a question in plain language — this runs against a locally-built
           embedding index (TF-IDF + SVD → FAISS), not an external LLM.
         </p>
       </div>
 
-      <form onSubmit={handleSearch} className="flex gap-3 mb-8">
+      <form onSubmit={handleSearch} className="mb-8 flex flex-col gap-3 sm:flex-row">
         <div className="relative flex-1">
-          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--color-ink)]/30">
+          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--color-ink)]/30" aria-hidden="true">
             ⌕
           </span>
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="e.g. how many days of annual leave do I get?"
-            className="w-full pl-10 pr-4 py-3 rounded-xl border border-[var(--color-line)] bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]/30 focus:border-[var(--color-accent)]"
+            className="field pl-10"
           />
         </div>
-        <PrimaryButton type="submit" disabled={loading} className="px-6">
+        <PrimaryButton type="submit" disabled={loading} className="w-full sm:w-auto sm:px-6">
           {loading ? <Spinner className="w-4 h-4" /> : "Search"}
         </PrimaryButton>
       </form>
 
       {error && (
-        <div className="text-sm text-[var(--color-danger)] bg-red-50 border border-red-200 rounded-lg px-4 py-3 mb-6">
+        <div className="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-[var(--color-danger)]">
           {error}
         </div>
       )}
@@ -80,22 +80,24 @@ export default function SearchPage() {
 
       {results && results.length > 0 && (
         <div className="space-y-4">
-          <div className="text-xs font-mono uppercase tracking-wider text-[var(--color-ink)]/40">
+          <div className="font-mono text-xs uppercase tracking-wider text-[var(--color-ink)]/40">
             {results.length} result{results.length !== 1 ? "s" : ""} for "{searchedFor}"
           </div>
           {results.map((r, i) => (
             <Card key={i} className="p-5">
-              <div className="flex items-start justify-between gap-4 mb-2">
-                <div className="flex items-center gap-2">
-                  <span className="text-[var(--color-accent)]">⎘</span>
-                  <span className="font-medium text-sm text-[var(--color-ink)]">
+              <div className="mb-3 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div className="flex min-w-0 items-center gap-2">
+                  <span className="text-[var(--color-accent)]" aria-hidden="true">
+                    ⎘
+                  </span>
+                  <span className="break-words text-sm font-medium text-[var(--color-ink)]">
                     {r.document_title}
                   </span>
                 </div>
-                <div className="flex items-center gap-2 shrink-0">
-                  <div className="w-16 h-1.5 rounded-full bg-[var(--color-paper)] overflow-hidden">
+                <div className="flex items-center gap-2 self-start shrink-0">
+                  <div className="h-1.5 w-16 overflow-hidden rounded-full bg-[var(--color-paper)]">
                     <div
-                      className="h-full bg-[var(--color-accent)] rounded-full"
+                      className="h-full rounded-full bg-[var(--color-accent)]"
                       style={{ width: `${scorePercent(r.score)}%` }}
                     />
                   </div>

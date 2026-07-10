@@ -1,8 +1,9 @@
 {
-  "name": "frontend",
+  "name": "ai-powered-task-knowledge-management-system-frontend",
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "description": "AI-Powered Task & Knowledge Management System",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

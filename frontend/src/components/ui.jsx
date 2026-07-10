@@ -1,7 +1,7 @@
 export function Card({ children, className = "" }) {
   return (
     <div
-      className={`bg-[var(--color-panel)] border border-[var(--color-line)] rounded-xl ${className}`}
+      className={`surface ${className}`}
     >
       {children}
     </div>
@@ -54,11 +54,15 @@ export function Spinner({ className = "" }) {
 
 export function EmptyState({ icon = "○", title, subtitle }) {
   return (
-    <div className="text-center py-16">
-      <div className="text-3xl mb-3 opacity-30">{icon}</div>
+    <div className="text-center py-10 sm:py-14 px-4">
+      <div className="text-3xl mb-3 opacity-30" aria-hidden="true">
+        {icon}
+      </div>
       <div className="font-medium text-[var(--color-ink)]/70">{title}</div>
       {subtitle && (
-        <div className="text-sm text-[var(--color-ink)]/40 mt-1">{subtitle}</div>
+        <div className="text-sm text-[var(--color-ink)]/40 mt-1 max-w-md mx-auto">
+          {subtitle}
+        </div>
       )}
     </div>
   );
@@ -67,7 +71,7 @@ export function EmptyState({ icon = "○", title, subtitle }) {
 export function PrimaryButton({ children, className = "", ...props }) {
   return (
     <button
-      className={`px-4 py-2 rounded-lg bg-[var(--color-accent)] text-white text-sm font-medium hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity ${className}`}
+      className={`btn-primary ${className}`}
       {...props}
     >
       {children}
@@ -78,10 +82,13 @@ export function PrimaryButton({ children, className = "", ...props }) {
 export function SecondaryButton({ children, className = "", ...props }) {
   return (
     <button
-      className={`px-4 py-2 rounded-lg border border-[var(--color-line)] bg-white text-sm font-medium text-[var(--color-ink)] hover:bg-[var(--color-accent-light)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors ${className}`}
+      className={`btn-secondary ${className}`}
       {...props}
     >
       {children}
     </button>
   );
 }
+
+export const fieldClass = "field";
+export const selectClass = "field-select";
