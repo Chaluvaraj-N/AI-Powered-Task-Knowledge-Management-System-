@@ -234,5 +234,4 @@ See [`docs/screenshots/`](docs/screenshots):
 6. `06_activity_log.png` — Activity log
 7. `07_user_dashboard.png` — Regular user's dashboard (RBAC-limited nav)
 8. `08_user_tasks.png` — Regular user's own tasks view
-#   A I - P o w e r e d - T a s k - K n o w l e d g e - M a n a g e m e n t - S y s t e m -  
- 
+#
