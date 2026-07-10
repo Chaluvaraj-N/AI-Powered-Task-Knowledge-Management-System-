@@ -1,0 +1,10 @@
+venv/
+__pycache__/
+*.pyc
+.env
+storage/app.db
+storage/uploads/*
+!storage/uploads/.gitkeep
+storage/vector_store/*
+!storage/vector_store/.gitkeep
+*.log
