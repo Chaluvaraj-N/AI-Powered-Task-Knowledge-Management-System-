@@ -1,8 +1,17 @@
 import api from "./client";
 
 // ---- Auth ----
-export const login = (email, password) =>
-  api.post("/auth/login", { email, password });
+export const login = (email, password) => {
+  const formData = new URLSearchParams();
+  formData.append("username", email);
+  formData.append("password", password);
+
+  return api.post("/auth/login", formData, {
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+  });
+};
 
 export const register = (full_name, email, password) =>
   api.post("/auth/register", { full_name, email, password });

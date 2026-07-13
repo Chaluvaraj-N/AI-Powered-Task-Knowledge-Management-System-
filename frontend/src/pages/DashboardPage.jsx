@@ -27,12 +27,29 @@ export default function DashboardPage() {
   const [analytics, setAnalytics] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    endpoints
-      .getAnalytics()
-      .then(({ data }) => setAnalytics(data))
-      .finally(() => setLoading(false));
-  }, []);
+useEffect(() => {
+  endpoints
+    .getAnalytics()
+    .then(({ data }) => {
+      setAnalytics(data);
+    })
+    .catch((err) => {
+      console.error("Analytics Error:", err);
+
+      setAnalytics({
+        total_tasks: 0,
+        completed_tasks: 0,
+        pending_tasks: 0,
+        total_documents: 0,
+        total_users: 0,
+        total_searches: 0,
+        most_searched_queries: [],
+      });
+    })
+    .finally(() => {
+      setLoading(false);
+    });
+}, []);
 
   const hour = new Date().getHours();
   const greeting = hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";

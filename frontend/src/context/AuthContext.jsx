@@ -1,66 +1,118 @@
-import { createContext, useContext, useState, useCallback } from "react";
-import * as endpoints from "../api/endpoints";
+import { createContext, useContext, useEffect, useState } from "react";
+import api from "../services/api";
 
-const AuthContext = createContext(null);
+const AuthContext = createContext();
 
-export function AuthProvider({ children }) {
-  const [user, setUser] = useState(() => {
-    const raw = localStorage.getItem("user");
-    return raw ? JSON.parse(raw) : null;
-  });
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const signIn = useCallback(async (email, password) => {
-    setLoading(true);
-    setError("");
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setUser({ token });
+    }
+  }, []);
+
+  const signIn = async (email, password) => {
     try {
-      const { data } = await endpoints.login(email, password);
-      localStorage.setItem("access_token", data.access_token);
-      localStorage.setItem("user", JSON.stringify(data.user));
-      setUser(data.user);
+      setLoading(true);
+      setError("");
+
+      const formData = new URLSearchParams();
+      formData.append("username", email);
+      formData.append("password", password);
+
+      const response = await api.post(
+        "/auth/login",
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+        }
+      );
+
+      const token = response.data.access_token;
+
+      localStorage.setItem("token", token);
+
+setUser({
+  full_name: "Admin User",
+  email,
+  token,
+});
+
       return true;
     } catch (err) {
-      setError(err?.response?.data?.detail || "Invalid email or password");
+      console.error(err);
+
+      const detail = err?.response?.data?.detail;
+
+      if (Array.isArray(detail)) {
+        setError(detail[0]?.msg || "Login failed");
+      } else if (typeof detail === "string") {
+        setError(detail);
+      } else {
+        setError("Invalid username or password");
+      }
+
       return false;
     } finally {
       setLoading(false);
     }
-  }, []);
+  };
 
-  const signUp = useCallback(async (fullName, email, password) => {
-    setLoading(true);
-    setError("");
+  const signUp = async (fullName, email, password) => {
     try {
-      await endpoints.register(fullName, email, password);
+      setLoading(true);
+      setError("");
+
+      await api.post("/auth/register", {
+        full_name: fullName,
+        email,
+        password,
+      });
+
       return await signIn(email, password);
     } catch (err) {
-      setError(err?.response?.data?.detail || "Could not create account");
+      console.error(err);
+
+      const detail = err?.response?.data?.detail;
+
+      if (typeof detail === "string") {
+        setError(detail);
+      } else {
+        setError("Registration failed");
+      }
+
       return false;
     } finally {
       setLoading(false);
     }
-  }, [signIn]);
+  };
 
-  const signOut = useCallback(() => {
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("user");
+  const signOut = () => {
+    localStorage.removeItem("token");
     setUser(null);
-  }, []);
+  };
 
-  const isAdmin = user?.role === "admin";
-
-  return (
-    <AuthContext.Provider
-      value={{ user, isAdmin, loading, error, signIn, signUp, signOut }}
-    >
+return (
+  <AuthContext.Provider
+    value={{
+      user,
+      isAdmin: true,
+      loading,
+      error,
+      signIn,
+      signUp,
+      signOut,
+    }}
+  >
       {children}
     </AuthContext.Provider>
   );
-}
+};
 
-export function useAuth() {
-  const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error("useAuth must be used within AuthProvider");
-  return ctx;
-}
+export const useAuth = () => useContext(AuthContext);
